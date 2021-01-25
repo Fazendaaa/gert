@@ -8,15 +8,24 @@ SEXP string_or_null(const char *x);
 SEXP safe_string(const char *x);
 SEXP safe_char(const char *x);
 SEXP make_strvec(int n, ...);
-SEXP build_list(int n, ...);
 SEXP list_to_tibble(SEXP df);
 SEXP new_git_repository(git_repository *repo);
 git_repository *get_git_repository(SEXP ptr);
 git_object *resolve_refish(SEXP string, git_repository *repo);
 git_commit *ref_to_commit(SEXP ref, git_repository *repo);
 
-#define build_tibble(...) list_to_tibble(build_list( __VA_ARGS__))
-
 #define AT_LEAST_LIBGIT2(x,y) (LIBGIT2_VER_MAJOR > x || LIBGIT2_VER_MINOR >= y)
-
 void set_checkout_notify_cb(git_checkout_options *opts);
+
+#define SSX2 const char *, SEXP
+SEXP build_list1(SSX2);
+SEXP build_list2(SSX2, SSX2);
+SEXP build_list3(SSX2, SSX2, SSX2);
+SEXP build_list4(SSX2, SSX2, SSX2, SSX2);
+SEXP build_list5(SSX2, SSX2, SSX2, SSX2, SSX2);
+SEXP build_list6(SSX2, SSX2, SSX2, SSX2, SSX2, SSX2);
+SEXP build_list7(SSX2, SSX2, SSX2, SSX2, SSX2, SSX2, SSX2);
+SEXP build_list8(SSX2, SSX2, SSX2, SSX2, SSX2, SSX2, SSX2, SSX2);
+
+#define build_list(n, ...) build_list##n( __VA_ARGS__)
+#define build_tibble(...) list_to_tibble(build_list( __VA_ARGS__))

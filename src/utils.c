@@ -97,7 +97,7 @@ SEXP make_strvec(int n, ...){
 }
 
 /* The input SEXPS must be protected beforehand */
-SEXP build_list(int n, ...){
+SEXP build_list_internal(int n, ...){
   va_list args;
   va_start(args, n);
   SEXP names = PROTECT(Rf_allocVector(STRSXP, n));
@@ -108,7 +108,7 @@ SEXP build_list(int n, ...){
   }
   va_end(args);
   Rf_setAttrib(vec, R_NamesSymbol, names);
-  UNPROTECT(2 + n);
+  UNPROTECT(2);
   return vec;
 }
 
@@ -137,4 +137,56 @@ void set_checkout_notify_cb(git_checkout_options *opts){
   opts->notify_cb = checkout_notify_cb;
   opts->notify_flags = GIT_CHECKOUT_NOTIFY_CONFLICT;
   opts->notify_payload = opts;
+}
+
+/* Wrappers with hardcoded unprotect(n) to please rchk */
+#define XP(i) const char * xna##i, SEXP xnb##i
+#define XA(i) xna##i, xnb##i
+
+SEXP build_list1(XP(1)){
+  SEXP out = build_list_internal(1, XA(1));
+  UNPROTECT(1);
+  return out;
+}
+
+SEXP build_list2(XP(1), XP(2)){
+  SEXP out = build_list_internal(2, XA(1), XA(2));
+  UNPROTECT(2);
+  return out;
+}
+
+SEXP build_list3(XP(1), XP(2), XP(3)){
+  SEXP out = build_list_internal(3, XA(1), XA(2), XA(3));
+  UNPROTECT(3);
+  return out;
+}
+
+SEXP build_list4(XP(1), XP(2), XP(3), XP(4)){
+  SEXP out = build_list_internal(4, XA(1), XA(2), XA(3), XA(4));
+  UNPROTECT(4);
+  return out;
+}
+
+SEXP build_list5(XP(1), XP(2), XP(3), XP(4), XP(5)){
+  SEXP out = build_list_internal(5, XA(1), XA(2), XA(3), XA(4), XA(5));
+  UNPROTECT(5);
+  return out;
+}
+
+SEXP build_list6(XP(1), XP(2), XP(3), XP(4), XP(5), XP(6)){
+  SEXP out = build_list_internal(6, XA(1), XA(2), XA(3), XA(4), XA(5), XA(6));
+  UNPROTECT(6);
+  return out;
+}
+
+SEXP build_list7(XP(1), XP(2), XP(3), XP(4), XP(5), XP(6), XP(7)){
+  SEXP out = build_list_internal(7, XA(1), XA(2), XA(3), XA(4), XA(5), XA(6), XA(7));
+  UNPROTECT(7);
+  return out;
+}
+
+SEXP build_list8(XP(1), XP(2), XP(3), XP(4), XP(5), XP(6), XP(7), XP(8)){
+  SEXP out = build_list_internal(8, XA(1), XA(2), XA(3), XA(4), XA(5), XA(6), XA(7), XA(8));
+  UNPROTECT(8);
+  return out;
 }
